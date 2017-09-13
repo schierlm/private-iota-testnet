@@ -56,7 +56,7 @@ In case you want a new milestone, just run the coordinator again.
 ## Reducing PoW
 
 Testnet by default requires PoW for minWeightMagnitude=13. When performing larger scale tests, you might want to decrease this. To do so, you will have to
-patch iri at [two](https://github.com/iotaledger/iri/blob/539e413352a77b1db2042f46887e41d558f575e5/src/main/java/com/iota/iri/conf/Configuration.java#L97-L98) [places](https://github.com/iotaledger/iri/blob/6ce238231ee883dcc1069626cf61b63f3efb8c01/src/main/java/com/iota/iri/TransactionValidator.java#L54-L56) and recompile it.
+patch iri at [two](https://github.com/iotaledger/iri/blob/539e413352a77b1db2042f46887e41d558f575e5/src/main/java/com/iota/iri/conf/Configuration.java#L97-L98) [places](https://github.com/iotaledger/iri/blob/6ce238231ee883dcc1069626cf61b63f3efb8c01/src/main/java/com/iota/iri/TransactionValidator.java#L54-L56) and recompile it. To build the package use `mvn package -Dmaven.test.skip=true` to prevent that tests will terminate the building process.
 
 When using the official wallet, you also have to patch this. If you (like me) have trouble recompiling the Windows wallet, you can instead patch it in-place. Have a look at `AppData\Local\Programs\iota\resources\ui\js\ui.update.js` (search for `connection.minWeightMagnitude`) and `AppData\Local\Programs\iota\resources\app.asar` (search for `var minWeightMagnitudeMinimum`). Note that the second file is a binary file, so when patching it make sure not to destroy any control characters (use a hex editor or an editor like Notepad++ that can keep them intact), and to keep the file size the same. Custom code usually passes the minWeightMagnitude as a parameter anyway.
 
