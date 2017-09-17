@@ -18,7 +18,7 @@ Get [iota.lib.java](https://github.com/iotaledger/iota.lib.java/) and install it
 
     mvn install
 
-Then compile this repository
+Then get and compile this (private-iota-testnet) repository
 
     mvn package
 
