@@ -1,6 +1,7 @@
 package iotatools;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -66,6 +67,11 @@ public class TestnetSnapshotBuilder {
 						}
 					} else {
 						value = Long.parseLong(line);
+					}
+					if (value > remainingIOTA) {
+						snapshotStream.close();
+						new File("Snapshot.txt").delete();
+						throw new NumberFormatException("Cheater. You do not have that many IOTA any more...");
 					}
 					snapshotStream.write((addr + ":" + value + "\n").getBytes(StandardCharsets.ISO_8859_1));
 					remainingIOTA -= value;
