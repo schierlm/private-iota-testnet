@@ -32,8 +32,9 @@ public class TestnetCoordinator {
 
 		IotaAPI api = new IotaAPI.Builder().host(args[0]).port(args[1]).build();
 		int milestone = api.getNodeInfo().getLatestMilestoneIndex();
-		if (milestone == 151000) {
-			newMilestone(api, NULL_HASH, NULL_HASH, 151001);
+		System.out.println(milestone);
+		if (milestone == 217000) {
+			newMilestone(api, NULL_HASH, NULL_HASH, 217001);
 		} else {
 			GetTransactionsToApproveResponse x = api.getTransactionsToApprove(10);
 			String secondTransaction = args.length > 2 ? args[2] : x.getBranchTransaction();

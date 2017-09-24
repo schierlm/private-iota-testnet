@@ -32,11 +32,9 @@ It will ask you about the IOTA you want to assign (you can also use suffixes lik
 
 Get [iri](https://github.com/iotaledger/iri/) if you do not already have it.
 
-Copy `Snapshot.txt` to iri/`src/main/ressources`.
+Copy `Snapshot.txt` to iri/`src/main/resources`.
 
 Comment out the [part that validates the snapshot signature](https://github.com/iotaledger/iri/blob/9d4abe2d59d336c0ecec1f826554bc2c1f29d278/src/main/java/com/iota/iri/Snapshot.java#L49-L65). It would also be possible to recreate the signature with a different signing key, but then you have to replace the signing key in the source code instead. So I think it is not worth the hassle and just decided to comment out the signature verification (The nodes will be only used by yourself, won't they?).
-
-You will also have to change the [hash selection code](https://github.com/iotaledger/iri/blob/539e413352a77b1db2042f46887e41d558f575e5/src/main/java/com/iota/iri/BundleValidator.java#L63-L67): At the moment, it will always choose CURL to validate spends from snapshot, so any spend transactions will never confirm. Change the code to use KERL all the time.
 
 Compile and run iri as usual. When starting iri, make sure to include the `--testnet` switch, and that the current directory does not contain any `testnetdb` files from previous runs.
 
