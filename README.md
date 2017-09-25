@@ -34,7 +34,7 @@ Get [iri](https://github.com/iotaledger/iri/) if you do not already have it.
 
 Copy `Snapshot.txt` to iri/`src/main/resources`.
 
-Comment out the [part that validates the snapshot signature](https://github.com/iotaledger/iri/blob/9d4abe2d59d336c0ecec1f826554bc2c1f29d278/src/main/java/com/iota/iri/Snapshot.java#L49-L65). It would also be possible to recreate the signature with a different signing key, but then you have to replace the signing key in the source code instead. So I think it is not worth the hassle and just decided to comment out the signature verification (The nodes will be only used by yourself, won't they?).
+Comment out the [part that validates the snapshot signature](https://github.com/iotaledger/iri/blob/3ce0b5bbf737c37ce721af5bfa1ae7f246cbb2ae/src/main/java/com/iota/iri/Snapshot.java#L52-L72). It would also be possible to recreate the signature with a different signing key, but then you have to replace the signing key in the source code instead. So I think it is not worth the hassle and just decided to comment out the signature verification (The nodes will be only used by yourself, won't they?).
 
 Compile and run iri as usual. When starting iri, make sure to include the `--testnet` switch, and that the current directory does not contain any `testnetdb` files from previous runs.
 
@@ -54,8 +54,8 @@ In case you want a new milestone, just run the coordinator again.
 ## Reducing PoW
 
 Testnet by default requires PoW for minWeightMagnitude=13. When performing larger scale tests, you might want to decrease this. To do so, you will have to
-patch iri at [two](https://github.com/iotaledger/iri/blob/539e413352a77b1db2042f46887e41d558f575e5/src/main/java/com/iota/iri/conf/Configuration.java#L97-L98) [places](https://github.com/iotaledger/iri/blob/6ce238231ee883dcc1069626cf61b63f3efb8c01/src/main/java/com/iota/iri/TransactionValidator.java#L54-L56) and recompile it. To build the package use `mvn package -Dmaven.test.skip=true` to prevent that tests will terminate the building process.
+patch iri at [two](https://github.com/iotaledger/iri/blob/6e23c046ec2232ca2031018a6bbee4abaad7d9a7/src/main/java/com/iota/iri/conf/Configuration.java#L97-L98) [places](https://github.com/iotaledger/iri/blob/64b3d723331bfdfa14ed883de447eb2363d3821b/src/main/java/com/iota/iri/TransactionValidator.java#L54-L56) and recompile it. To build the package use `mvn package -Dmaven.test.skip=true` to prevent that tests will terminate the building process.
 
 When using the official wallet, you also have to patch this. If you (like me) have trouble recompiling the Windows wallet, you can instead patch it in-place. Have a look at `AppData\Local\Programs\iota\resources\ui\js\ui.update.js` (search for `connection.minWeightMagnitude`) and `AppData\Local\Programs\iota\resources\app.asar` (search for `var minWeightMagnitudeMinimum`). Note that the second file is a binary file, so when patching it make sure not to destroy any control characters (use a hex editor or an editor like Notepad++ that can keep them intact), and to keep the file size the same. Custom code usually passes the minWeightMagnitude as a parameter anyway.
 
-In most cases, however, it is enough to make sure you use minWeightMagnitude=13 instead of 15 and it will be "fast enough".
+In most cases, however, it is enough to make sure you use minWeightMagnitude=13 instead of 14 and it will be "fast enough".

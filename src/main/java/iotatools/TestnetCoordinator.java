@@ -6,6 +6,7 @@ import java.util.List;
 
 import jota.IotaAPI;
 import jota.dto.response.GetAttachToTangleResponse;
+import jota.dto.response.GetNodeInfoResponse;
 import jota.dto.response.GetTransactionsToApproveResponse;
 import jota.model.Bundle;
 import jota.model.Transaction;
@@ -31,10 +32,10 @@ public class TestnetCoordinator {
 			args = new String[] { "localhost", "14700", args[0] };
 
 		IotaAPI api = new IotaAPI.Builder().host(args[0]).port(args[1]).build();
-		int milestone = api.getNodeInfo().getLatestMilestoneIndex();
-		System.out.println(milestone);
-		if (milestone == 217000) {
-			newMilestone(api, NULL_HASH, NULL_HASH, 217001);
+		GetNodeInfoResponse nodeInfo = api.getNodeInfo();
+		int milestone = nodeInfo.getLatestMilestoneIndex();
+		if (nodeInfo.getLatestMilestone().equals(NULL_HASH)) {
+			newMilestone(api, NULL_HASH, NULL_HASH, milestone + 1);
 		} else {
 			GetTransactionsToApproveResponse x = api.getTransactionsToApprove(10);
 			String secondTransaction = args.length > 2 ? args[2] : x.getBranchTransaction();
