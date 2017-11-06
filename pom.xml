@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.iota</groupId>
             <artifactId>jota</artifactId>
-            <version>0.9.3-SNAPSHOT</version>
+            <version>0.9.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

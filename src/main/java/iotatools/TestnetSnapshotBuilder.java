@@ -51,7 +51,7 @@ public class TestnetSnapshotBuilder {
 					logStream.flush();
 					if (line.isEmpty() && i == 0) {
 						out.println("  " + Checksum.addChecksum(addr) + ": "+remainingIOTA);
-						snapshotStream.write((addr + ":" + remainingIOTA + "\n").getBytes(StandardCharsets.ISO_8859_1));
+						snapshotStream.write((addr + ";" + remainingIOTA + "\n").getBytes(StandardCharsets.ISO_8859_1));
 						remainingIOTA = 0;
 					}
 					if (line.isEmpty())
@@ -73,7 +73,7 @@ public class TestnetSnapshotBuilder {
 						new File("Snapshot.txt").delete();
 						throw new NumberFormatException("Cheater. You do not have that many IOTA any more...");
 					}
-					snapshotStream.write((addr + ":" + value + "\n").getBytes(StandardCharsets.ISO_8859_1));
+					snapshotStream.write((addr + ";" + value + "\n").getBytes(StandardCharsets.ISO_8859_1));
 					remainingIOTA -= value;
 				}
 			}
