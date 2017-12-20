@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.iota</groupId>
             <artifactId>jota</artifactId>
-            <version>0.9.6-SNAPSHOT</version>
+            <version>0.9.10</version>
         </dependency>
     </dependencies>
     <build>
@@ -63,4 +63,14 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-iotaledger-maven</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/iotaledger/maven</url>
+        </repository>
+    </repositories>
 </project>

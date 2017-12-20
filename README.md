@@ -14,11 +14,7 @@ This repository contains tools (written in Java) to build your own Snapshot and 
 
 ## Step by step instructions
 
-Get [iota.lib.java](https://github.com/iotaledger/iota.lib.java/) and install it into your local Maven repository:
-
-    mvn install
-
-Then get and compile this ([private-iota-testnet](https://github.com/schierlm/private-iota-testnet)) repository
+Get and compile this ([private-iota-testnet](https://github.com/schierlm/private-iota-testnet)) repository
 
     mvn package
 
