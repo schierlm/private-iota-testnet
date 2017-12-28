@@ -18,6 +18,8 @@ Get and compile this ([private-iota-testnet](https://github.com/schierlm/private
 
     mvn package
 
+In case you are on Windows and your build process freezes at that point, this may be caused by a bug in Maven when repacking the signed BouncyCastle jar file. To work around it, you can open `%USERPROFILE%\.m2\repository\org\bouncycastle\bcprov-jdk15on\1.58\bcprov-jdk15on-1.58.jar` with a zip program and remove the signature files inside its `META-INF` directory (they are not needed for iota or iri to work), then rebuild.
+
 Now it is time to build your own Snapshot. First decide how you want to split the 2 779 530 283 277 761 available IOTA to addresses, and which of them should belong to the same wallet.
 
 Then start the interactive process:
@@ -50,8 +52,38 @@ In case you want a new milestone, just run the coordinator again.
 ## Reducing PoW
 
 Testnet by default requires PoW for minWeightMagnitude=13. When performing larger scale tests, you might want to decrease this. To do so, you will have to
-patch iri at [two](https://github.com/iotaledger/iri/blob/6e23c046ec2232ca2031018a6bbee4abaad7d9a7/src/main/java/com/iota/iri/conf/Configuration.java#L97-L98) [places](https://github.com/iotaledger/iri/blob/64b3d723331bfdfa14ed883de447eb2363d3821b/src/main/java/com/iota/iri/TransactionValidator.java#L54-L56) and recompile it. To build the package use `mvn package -Dmaven.test.skip=true` to prevent that tests will terminate the building process.
+patch iri at [two](https://github.com/iotaledger/iri/blob/6e23c046ec2232ca2031018a6bbee4abaad7d9a7/src/main/java/com/iota/iri/conf/Configuration.java#L97-L98) [places](https://github.com/iotaledger/iri/blob/64b3d723331bfdfa14ed883de447eb2363d3821b/src/main/java/com/iota/iri/TransactionValidator.java#L54-L56) and recompile it. To build the package use `mvn package -Dmaven.test.skip=true` to prevent that tests will terminate the building process; also be aware that the UDP protocol between neighbors will break as the packets are not big enough to hold the full transaction hash if the hash does not end with a sufficient amount of zeroes (so best test with only a single isolated node).
 
 When using the official wallet, you also have to patch this. If you (like me) have trouble recompiling the Windows wallet, you can instead patch it in-place. Have a look at `AppData\Local\Programs\iota\resources\ui\js\ui.update.js` (search for `connection.minWeightMagnitude`) and `AppData\Local\Programs\iota\resources\app.asar` (search for `var minWeightMagnitudeMinimum`). Note that the second file is a binary file, so when patching it make sure not to destroy any control characters (use a hex editor or an editor like Notepad++ that can keep them intact), and to keep the file size the same. Custom code usually passes the minWeightMagnitude as a parameter anyway.
 
 In most cases, however, it is enough to make sure you use minWeightMagnitude=13 instead of 14 and it will be "fast enough".
+
+## Signing snapshots and milestones
+
+iri uses Merkle-Winternitz signatures to sign snapshots and milestones, using CurlP27 and CurlP81 hash function, respectively. As the Merkle hash tree for
+the milestons is rather large (1048576 subkeys) and generation can take a while, this project provides a way to compute partial Merkle hash trees where
+only some indices (e. g. 243000 to 243100) are filled. This makes generation much faster, while still allowing to test signature verification in real-life
+conditions.
+
+If you want to go that route, you need to change the [Coordinator address](https://github.com/iotaledger/iri/blob/12a4bc6307426ee17ca47dd805acac634e26fff8/src/main/java/com/iota/iri/Iota.java#L34) and the [Snapshot signing public key](https://github.com/iotaledger/iri/blob/12a4bc6307426ee17ca47dd805acac634e26fff8/src/main/java/com/iota/iri/Snapshot.java#L23) in the iri source before recompiling.
+You may also need to [enable milestone signature verification](https://github.com/iotaledger/iri/blob/12a4bc6307426ee17ca47dd805acac634e26fff8/src/main/java/com/iota/iri/Milestone.java#L206) when you are using testnet configuration otherwise.
+
+Generate key files for snapshots and milestones:
+
+    java -cp target/iota-testnet-tools-0.1-SNAPSHOT-jar-with-dependencies.jar iotatools.KeyfileBuilder Snapshot.key 3 CURLP81 6 1 3
+
+    java -cp target/iota-testnet-tools-0.1-SNAPSHOT-jar-with-dependencies.jar iotatools.KeyfileBuilder Coordinator.key 1 CURLP27 20 243000 100
+
+The keyfile parameters are security (3 for snapshot, 1 for milestones), hash algorithm, Merkle tree depth, and optionally first used key and number of keys
+(to make generation faster). The pubkey is printed on the console and also in the last line of the key file.
+
+
+Signing a snapshot:
+
+    java -cp target/iota-testnet-tools-0.1-SNAPSHOT-jar-with-dependencies.jar iotatools.SnapshotSigner Snapshot.key 1
+
+Creating a signed milestone:
+
+    java -cp target/iota-testnet-tools-0.1-SNAPSHOT-jar-with-dependencies.jar iotatools.SignedCoordinator localhost 14700
+
+Always remember: With great power comes great responsibility - I do not want to see this repo end as the base of yet another Aidos Kuneen...
