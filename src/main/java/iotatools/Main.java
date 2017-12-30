@@ -14,6 +14,8 @@ public class Main {
 			TestnetSnapshotBuilder.main(args);
 		} else if (args.length >= 1 && args[0].equals("Coordinator")) {
 			TestnetCoordinator.main(Arrays.copyOfRange(args, 1, args.length));
+		} else if (args.length >= 1 && args[0].equals("PeriodicCoordinator")) {
+			PeriodicCoordinator.main(Arrays.copyOfRange(args, 1, args.length));
 		} else {
 			System.out.println("Do you want Coordinator or SnapshotBuilder?");
 		}

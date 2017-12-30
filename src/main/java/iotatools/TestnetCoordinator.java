@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.cli.*;
+
 import jota.IotaAPI;
 import jota.dto.response.GetAttachToTangleResponse;
 import jota.dto.response.GetNodeInfoResponse;
@@ -20,10 +22,10 @@ import jota.utils.Converter;
  */
 public class TestnetCoordinator {
 
-	private static final String NULL_HASH = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
-	private static final String TESTNET_COORDINATOR_ADDRESS = "XNZBYAST9BETSDNOVQKKTBECYIPMF9IPOZRWUPFQGVH9HJW9NDSQVIPVBWU9YKECRYGDSJXYMZGHZDXCA";
-	private static final String NULL_ADDRESS = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
-	private static final int TAG_TRINARY_SIZE = 81;
+	public static final String NULL_HASH = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
+	public static final String TESTNET_COORDINATOR_ADDRESS = "XNZBYAST9BETSDNOVQKKTBECYIPMF9IPOZRWUPFQGVH9HJW9NDSQVIPVBWU9YKECRYGDSJXYMZGHZDXCA";
+	public static final String NULL_ADDRESS = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
+	public static final int TAG_TRINARY_SIZE = 81;
 
 	public static void main(String[] args) throws Exception {
 		if (args.length == 0)
@@ -44,7 +46,9 @@ public class TestnetCoordinator {
 		System.out.println("New milestone created.");
 	}
 
-	private static void newMilestone(IotaAPI api, String tip1, String tip2, long index) throws Exception {
+
+
+	static void newMilestone(IotaAPI api, String tip1, String tip2, long index) throws Exception {
 		final Bundle bundle = new Bundle();
 		String tag = Converter.trytes(Converter.trits(index, TAG_TRINARY_SIZE));
 		long timestamp = System.currentTimeMillis() / 1000;
