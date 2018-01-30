@@ -32,7 +32,7 @@ Get [iri](https://github.com/iotaledger/iri/) if you do not already have it.
 
 Copy `Snapshot.txt` to iri/`src/main/resources`.
 
-Comment out the [part that validates the snapshot signature](https://github.com/iotaledger/iri/blob/3ce0b5bbf737c37ce721af5bfa1ae7f246cbb2ae/src/main/java/com/iota/iri/Snapshot.java#L52-L72). It would also be possible to recreate the signature with a different signing key, but then you have to replace the signing key in the source code instead. So I think it is not worth the hassle and just decided to comment out the signature verification (The nodes will be only used by yourself, won't they?).
+Comment out the [part that validates the snapshot signature](https://github.com/iotaledger/iri/blob/b95606fc83f03a415750e6c1377d96a200badd6f/src/main/java/com/iota/iri/Snapshot.java#L39-L41). It would also be possible to recreate the signature with a different signing key, but then you have to replace the signing key in the source code instead. So I think it is not worth the hassle and just decided to comment out the signature verification (The nodes will be only used by yourself, won't they?).
 
 Compile and run iri as usual. When starting iri, make sure to include the `--testnet` switch, and that the current directory does not contain any `testnetdb` files from previous runs.
 
