@@ -1,6 +1,6 @@
 ## Private IOTA Testnet
 
-When you want to perform some test/auditing against the IOTA Reference implementation (IRI), you probably want to test your assumptions against your own testnet (for some scenarios one node is enough, other require more nodes). Using the public testnet has the disadvantage that you are not alone on your tangle, so somebody else might confirm your transactions you like to stay unconfirmed, or breakpoints you add inside IRI can trigger by transactions done by others thyn you. Currently you will face some obstacles when trying to do so:
+When you want to perform some test/auditing against the IOTA Reference implementation (IRI), you probably want to test your assumptions against your own testnet (for some scenarios one node is enough, other require more nodes). Using the public testnet has the disadvantage that you are not alone on your tangle, so somebody else might confirm transactions you want to stay unconfirmed, or trigger your breakpoints via their own transactions. There are a few obstacles with running your own private testnet, including:
 
 - The official wallet will not connect to any node which has not received at least one milestone from the coordinator
 - As IOTA is not mineable, your accounts will start with 0 IOTA, and you cannot change this by mining some
@@ -20,7 +20,7 @@ Get and compile this ([private-iota-testnet](https://github.com/schierlm/private
 
 In case you are on Windows and your build process freezes at that point, this may be caused by a bug in Maven when repacking the signed BouncyCastle jar file. To work around it, you can open `%USERPROFILE%\.m2\repository\org\bouncycastle\bcprov-jdk15on\1.58\bcprov-jdk15on-1.58.jar` with a zip program and remove the signature files inside its `META-INF` directory (they are not needed for iota or iri to work), then rebuild.
 
-Now it is time to build your own Snapshot. First decide how you want to split the 2 779 530 283 277 761 available IOTA to addresses, and which of them should belong to the same wallet.
+Now it is time to build your own Snapshot. First decide how you want to split the 2,779,530,283,277,761 available IOTA to addresses, and which of them should belong to the same wallet.
 
 Then start the interactive process:
 
@@ -32,7 +32,7 @@ Get [iri](https://github.com/iotaledger/iri/) if you do not already have it.
 
 Copy `Snapshot.txt` to iri/`src/main/resources`.
 
-Comment out the [part that validates the snapshot signature](https://github.com/iotaledger/iri/blob/b95606fc83f03a415750e6c1377d96a200badd6f/src/main/java/com/iota/iri/Snapshot.java#L39-L41). It would also be possible to recreate the signature with a different signing key, but then you have to replace the signing key in the source code instead. So I think it is not worth the hassle and just decided to comment out the signature verification (The nodes will be only used by yourself, won't they?).
+Comment out the [part that validates the snapshot signature](https://github.com/iotaledger/iri/blob/b95606fc83f03a415750e6c1377d96a200badd6f/src/main/java/com/iota/iri/Snapshot.java#L39-L41). It would also be possible to recreate the signature with a different signing key, but then you have to replace the signing key in the source code instead. So I think it is not worth the hassle and just decided to comment out the signature verification (the nodes will be only used by yourself, so this won't matter).
 
 Compile and run iri as usual. When starting iri, make sure to include the `--testnet` switch, and that the current directory does not contain any `testnetdb` files from previous runs.
 
@@ -45,7 +45,6 @@ Before you can connect to your iri with your wallet, you need to run the coordin
 After that you can use your wallet, log into one of your seeds, and attach addresses until you see your full balance.
 
 In case you want a new milestone, just run the coordinator again.
-
 
 ***Have fun!***
 
