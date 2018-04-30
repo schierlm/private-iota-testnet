@@ -28,15 +28,13 @@ Then start the interactive process:
 
 It will ask you about the IOTA you want to assign (you can also use suffixes like Gi or Pi). Once you have assigned all IOTA, it will write a `Snapshot.txt` (to be compiled into iri) and a `Snapshot.log` (for you to remember the seeds to the addresses).
 
-Get [iri](https://github.com/iotaledger/iri/) if you do not already have it.
+Get [iri](https://github.com/iotaledger/iri/) if you do not already have it. As of iri 1.4.2.4 it is no longer required to patch and recompile iri, so you can decide by yourself if you prefer to compile it yourself or if you take the precompiled jar file.
 
-Copy `Snapshot.txt` to iri/`src/main/resources`.
+Copy `Snapshot.txt` in the same directory as `iri-1.4.2.4.jar`.
 
-Comment out the [part that validates the snapshot signature](https://github.com/iotaledger/iri/blob/b95606fc83f03a415750e6c1377d96a200badd6f/src/main/java/com/iota/iri/Snapshot.java#L39-L41). It would also be possible to recreate the signature with a different signing key, but then you have to replace the signing key in the source code instead. So I think it is not worth the hassle and just decided to comment out the signature verification (the nodes will be only used by yourself, so this won't matter).
+When starting iri, make sure to include the `--testnet` switch, as well as `--testnet-no-coo-validation` to skip milestone validation, and your custom snapshot. The current directory should not contain any `testnetdb` files from previous runs.
 
-Compile and run iri as usual. When starting iri, make sure to include the `--testnet` switch, and that the current directory does not contain any `testnetdb` files from previous runs.
-
-    java -jar iri.jar --testnet -p 14700
+    java -jar iri-1.4.2.4.jar --testnet --testnet-no-coo-validation --snapshot=Snapshot.txt -p 14700
 
 Before you can connect to your iri with your wallet, you need to run the coordinator to create the first milestone
 
@@ -50,8 +48,8 @@ In case you want a new milestone, just run the coordinator again.
 
 ## Reducing PoW
 
-Testnet by default requires PoW for minWeightMagnitude=13. When performing larger scale tests, you might want to decrease this. To do so, you will have to
-patch iri at [two](https://github.com/iotaledger/iri/blob/6e23c046ec2232ca2031018a6bbee4abaad7d9a7/src/main/java/com/iota/iri/conf/Configuration.java#L97-L98) [places](https://github.com/iotaledger/iri/blob/64b3d723331bfdfa14ed883de447eb2363d3821b/src/main/java/com/iota/iri/TransactionValidator.java#L54-L56) and recompile it. To build the package use `mvn package -Dmaven.test.skip=true` to prevent that tests will terminate the building process; also be aware that the UDP protocol between neighbors will break as the packets are not big enough to hold the full transaction hash if the hash does not end with a sufficient amount of zeroes (so best test with only a single isolated node).
+Testnet by default requires PoW for minWeightMagnitude=13. When performing larger scale tests, you might want to decrease this. To do so, no more patching of iri is needed; just pass the `--mwm` option with your desired value.
+Be aware that the UDP protocol between neighbors will break as the packets are not big enough to hold the full transaction hash if the hash does not end with a sufficient amount of zeroes (so best test with only a single isolated node or increase `TESTNET_PACKET_SIZE`).
 
 When using the official wallet, you also have to patch this. If you (like me) have trouble recompiling the Windows wallet, you can instead patch it in-place. Have a look at `AppData\Local\Programs\iota\resources\ui\js\ui.update.js` (search for `connection.minWeightMagnitude`) and `AppData\Local\Programs\iota\resources\app.asar` (search for `var minWeightMagnitudeMinimum`). Note that the second file is a binary file, so when patching it make sure not to destroy any control characters (use a hex editor or an editor like Notepad++ that can keep them intact), and to keep the file size the same. Custom code usually passes the minWeightMagnitude as a parameter anyway.
 
@@ -64,8 +62,10 @@ the milestons is rather large (1048576 subkeys) and generation can take a while,
 only some indices (e. g. 243000 to 243100) are filled. This makes generation much faster, while still allowing to test signature verification in real-life
 conditions.
 
-If you want to go that route, you need to change the [Coordinator address](https://github.com/iotaledger/iri/blob/12a4bc6307426ee17ca47dd805acac634e26fff8/src/main/java/com/iota/iri/Iota.java#L34) and the [Snapshot signing public key](https://github.com/iotaledger/iri/blob/12a4bc6307426ee17ca47dd805acac634e26fff8/src/main/java/com/iota/iri/Snapshot.java#L23) in the iri source before recompiling.
-You may also need to [enable milestone signature verification](https://github.com/iotaledger/iri/blob/12a4bc6307426ee17ca47dd805acac634e26fff8/src/main/java/com/iota/iri/Milestone.java#L206) when you are using testnet configuration otherwise.
+For signed milestones, you need to change the Coordinator address using `--testnet-coordinator` switch and may also need to enable milestone signature verification (by omitting `--testnet-no-coo-validation` switch).
+
+For signed snapshots, you need to patch the [Snapshot signing public key](https://github.com/iotaledger/iri/blob/12a4bc6307426ee17ca47dd805acac634e26fff8/src/main/java/com/iota/iri/Snapshot.java#L23) in the iri source (as well as replacing the included snapshot and signature file in `src/main/resources`) before recompiling iri.
+
 
 Generate key files for snapshots and milestones:
 

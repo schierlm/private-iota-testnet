@@ -23,7 +23,7 @@ import jota.utils.Converter;
 public class TestnetCoordinator {
 
 	public static final String NULL_HASH = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
-	public static final String TESTNET_COORDINATOR_ADDRESS = "XNZBYAST9BETSDNOVQKKTBECYIPMF9IPOZRWUPFQGVH9HJW9NDSQVIPVBWU9YKECRYGDSJXYMZGHZDXCA";
+	public static final String TESTNET_COORDINATOR_ADDRESS = "EQQFCZBIHRHWPXKMTOLMYUYPCN9XLMJPYZVFJSAY9FQHCCLWTOLLUGKKMXYFDBOOYFBLBI9WUEILGECYM";
 	public static final String NULL_ADDRESS = "999999999999999999999999999999999999999999999999999999999999999999999999999999999";
 	public static final int TAG_TRINARY_SIZE = 81;
 
@@ -37,6 +37,10 @@ public class TestnetCoordinator {
 		GetNodeInfoResponse nodeInfo = api.getNodeInfo();
 		int milestone = nodeInfo.getLatestMilestoneIndex();
 		if (nodeInfo.getLatestMilestone().equals(NULL_HASH)) {
+			// As of 1.4.2.4, at least two milestones are required so that the latest solid subtangle milestone gets updated.
+			newMilestone(api, NULL_HASH, NULL_HASH, milestone + 1);
+			newMilestone(api, NULL_HASH, NULL_HASH, milestone + 2);
+		} else if (nodeInfo.getLatestSolidSubtangleMilestone().equals(NULL_HASH)) {
 			newMilestone(api, NULL_HASH, NULL_HASH, milestone + 1);
 		} else {
 			GetTransactionsToApproveResponse x = api.getTransactionsToApprove(10);
