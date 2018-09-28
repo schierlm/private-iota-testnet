@@ -28,13 +28,15 @@ Then start the interactive process:
 
 It will ask you about the IOTA you want to assign (you can also use suffixes like Gi or Pi). Once you have assigned all IOTA, it will write a `Snapshot.txt` (to be compiled into iri) and a `Snapshot.log` (for you to remember the seeds to the addresses).
 
-Get [iri](https://github.com/iotaledger/iri/) if you do not already have it. As of iri 1.4.2.4 it is no longer required to patch and recompile iri, so you can decide by yourself if you prefer to compile it yourself or if you take the precompiled jar file.
+Get [iri](https://github.com/iotaledger/iri/) if you do not already have it. This process has (last) been tested with iri 1.5.4, so if you are trying a later version, you do it at your own risk. Please re-test with 1.5.4 before opening a ticket.
 
-Copy `Snapshot.txt` in the same directory as `iri-1.4.2.4.jar`.
+As of iri 1.4.2.4 it is no longer required to patch and recompile iri, so you can decide by yourself if you prefer to compile it yourself or if you take the precompiled jar file.
+
+Copy `Snapshot.txt` in the same directory as `iri-1.5.4.jar`.
 
 When starting iri, make sure to include the `--testnet` switch, as well as `--testnet-no-coo-validation` to skip milestone validation, and your custom snapshot. The current directory should not contain any `testnetdb` files from previous runs.
 
-    java -jar iri-1.4.2.4.jar --testnet --testnet-no-coo-validation --snapshot=Snapshot.txt -p 14700
+    java -jar iri-1.5.4.jar --testnet --testnet-no-coo-validation --snapshot=Snapshot.txt -p 14700
 
 Before you can connect to your iri with your wallet, you need to run the coordinator to create the first milestone
 
@@ -48,12 +50,12 @@ In case you want a new milestone, just run the coordinator again.
 
 ## Reducing PoW
 
-Testnet by default requires PoW for minWeightMagnitude=13. When performing larger scale tests, you might want to decrease this. To do so, no more patching of iri is needed; just pass the `--mwm` option with your desired value.
+Testnet by default requires PoW for minWeightMagnitude=9. When performing larger scale tests, you might want to decrease this. To do so, no more patching of iri is needed; just pass the `--mwm` option with your desired value.
 Be aware that the UDP protocol between neighbors will break as the packets are not big enough to hold the full transaction hash if the hash does not end with a sufficient amount of zeroes (so best test with only a single isolated node or increase `TESTNET_PACKET_SIZE`).
 
-When using the official wallet, you also have to patch this. If you (like me) have trouble recompiling the Windows wallet, you can instead patch it in-place. Have a look at `AppData\Local\Programs\iota\resources\ui\js\ui.update.js` (search for `connection.minWeightMagnitude`) and `AppData\Local\Programs\iota\resources\app.asar` (search for `var minWeightMagnitudeMinimum`). Note that the second file is a binary file, so when patching it make sure not to destroy any control characters (use a hex editor or an editor like Notepad++ that can keep them intact), and to keep the file size the same. Custom code usually passes the minWeightMagnitude as a parameter anyway.
+When using the official wallet, you also have to patch this, since the wallet does not allow MWM smaller than 13. If you (like me) have trouble recompiling the Windows wallet, you can instead patch it in-place. Have a look at `AppData\Local\Programs\iota\resources\ui\js\ui.update.js` (search for `connection.minWeightMagnitude`) and `AppData\Local\Programs\iota\resources\app.asar` (search for `var minWeightMagnitudeMinimum`). Note that the second file is a binary file, so when patching it make sure not to destroy any control characters (use a hex editor or an editor like Notepad++ that can keep them intact), and to keep the file size the same. Custom code usually passes the minWeightMagnitude as a parameter anyway.
 
-In most cases, however, it is enough to make sure you use minWeightMagnitude=13 instead of 14 and it will be "fast enough".
+In most cases, however, it is enough to make sure you use minWeightMagnitude=9 (or 13) instead of 14 and it will be "fast enough".
 
 ## Signing snapshots and milestones
 

@@ -105,7 +105,7 @@ public class SignedCoordinator {
 		txn1.setAttachmentTimestamp(System.currentTimeMillis());
 		txn1.setAttachmentTimestampLowerBound(0);
 		txn1.setAttachmentTimestampUpperBound(3_812_798_742_493L);
-		resultTrytes[0] = localPoW.performPoW(txn1.toTrytes(), 13);
+		resultTrytes[0] = localPoW.performPoW(txn1.toTrytes(), 9);
 		String previousTransaction = new Transaction(resultTrytes[0]).getHash();
 		System.out.println("Signed trunk transaction: " + previousTransaction);
 		Transaction txn2 = new Transaction(trytes1[1]);
@@ -123,7 +123,7 @@ public class SignedCoordinator {
 		txn2.setAttachmentTimestamp(System.currentTimeMillis());
 		txn2.setAttachmentTimestampLowerBound(0);
 		txn2.setAttachmentTimestampUpperBound(3_812_798_742_493L);
-		resultTrytes[1] = localPoW.performPoW(txn2.toTrytes(), 13);
+		resultTrytes[1] = localPoW.performPoW(txn2.toTrytes(), 9);
 		api.storeTransactions(resultTrytes);
 		api.broadcastTransactions(resultTrytes);
 	}
