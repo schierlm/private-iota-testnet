@@ -1,3 +1,9 @@
+**NOTE** Meanwhile, the IOTA Foundation published its own official documentation how to run a private tangle, so I might retire this repository soon. New users please go to
+
+https://github.com/iotaledger/compass/blob/master/docs/HOWTO_private_tangle.md
+
+---
+
 ## Private IOTA Testnet
 
 When you want to perform some test/auditing against the IOTA Reference implementation (IRI), you probably want to test your assumptions against your own testnet (for some scenarios one node is enough, other require more nodes). Using the public testnet has the disadvantage that you are not alone on your tangle, so somebody else might confirm transactions you want to stay unconfirmed, or trigger your breakpoints via their own transactions. There are a few obstacles with running your own private testnet, including:
