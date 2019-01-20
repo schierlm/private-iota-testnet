@@ -24,8 +24,6 @@ Get and compile this ([private-iota-testnet](https://github.com/schierlm/private
 
     mvn package
 
-In case you are on Windows and your build process freezes at that point, this may be caused by a bug in Maven when repacking the signed BouncyCastle jar file. To work around it, you can open `%USERPROFILE%\.m2\repository\org\bouncycastle\bcprov-jdk15on\1.58\bcprov-jdk15on-1.58.jar` with a zip program and remove the signature files inside its `META-INF` directory (they are not needed for iota or iri to work), then rebuild.
-
 Now it is time to build your own Snapshot. First decide how you want to split the 2,779,530,283,277,761 available IOTA to addresses, and which of them should belong to the same wallet.
 
 Then start the interactive process:
