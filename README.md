@@ -1,4 +1,4 @@
-**NOTE** Meanwhile, the IOTA Foundation published its own official documentation how to run a private tangle, so I might retire this repository soon. New users please go to
+**NOTE** Meanwhile, the IOTA Foundation published its own official documentation how to run a private tangle, so this repo is now obsolete. New users please go to
 
 https://github.com/iotaledger/compass/blob/master/docs/HOWTO_private_tangle.md
 
